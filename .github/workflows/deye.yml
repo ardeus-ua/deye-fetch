@@ -33,7 +33,8 @@ jobs:
           DEYE_APP_SECRET: ${{ secrets.DEYE_APP_SECRET }}
           DEYE_EMAIL: ${{ secrets.DEYE_EMAIL }}
           DEYE_PASSWORD: ${{ secrets.DEYE_PASSWORD }}
-          DEYE_DEVICES: ${{ secrets.DEYE_DEVICES }}
+          TARGETS: ${{ secrets.TARGETS }}             # JSON зі списком сайтів (див. fetch.mjs)
+          DEYE_DEVICES: ${{ secrets.DEYE_DEVICES }}   # старий формат на один сайт — якщо TARGETS не задано
           INGEST_URL: ${{ secrets.INGEST_URL }}
           INGEST_TOKEN: ${{ secrets.INGEST_TOKEN }}
         run: node fetch.mjs --minutes 350

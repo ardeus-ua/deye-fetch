@@ -1,6 +1,6 @@
 # deye-fetch
 
-Раз на 5 хв (о :00, :05, :10 … UTC) бере дані інверторів з DeyeCloud developer API і надсилає їх на сайт.
+Раз на 5 хв (о :00, :05, :10 … UTC) бере дані інверторів з DeyeCloud developer API і надсилає їх на сайти.
 
 Навіщо окремо: CloudFront DeyeCloud блокує IP Cloudflare (HTTP 403), тому сайт на Cloudflare Pages
 не може ходити до Deye сам. З GitHub Actions Deye відповідає.
@@ -16,10 +16,18 @@
 
 | Secret | |
 |---|---|
-| `DEYE_APP_ID`, `DEYE_APP_SECRET` | developer.deyecloud.com |
-| `DEYE_EMAIL`, `DEYE_PASSWORD` | акаунт DeyeCloud |
-| `DEYE_DEVICES` | серійні номери інверторів через кому |
-| `INGEST_URL` | адреса прийому на сайті |
-| `INGEST_TOKEN` | той самий токен, що на сайті |
+| `DEYE_APP_ID`, `DEYE_APP_SECRET`, `DEYE_EMAIL`, `DEYE_PASSWORD` | акаунт DeyeCloud за замовчуванням |
+| `TARGETS` | JSON-масив сайтів, див. нижче |
+
+```json
+[
+  { "name": "site1", "url": "https://.../api/battery_ingest", "token": "...", "devices": ["sn1", "sn2"] },
+  { "name": "site2", "url": "https://.../api/battery_ingest", "token": "...", "devices": ["sn3"],
+    "deye": { "appId": "...", "appSecret": "...", "email": "...", "password": "..." } }
+]
+```
+
+`deye` — необов'язковий окремий акаунт для сайту. Сайти з одним акаунтом обслуговуються одним логіном
+і одним запитом даних. Без `TARGETS` — старий формат на один сайт: `DEYE_DEVICES`, `INGEST_URL`, `INGEST_TOKEN`.
 
 Локально: `DEYE_...=... node fetch.mjs --dry` — один цикл без відправки.
